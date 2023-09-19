@@ -1,4 +1,4 @@
-An example SwiftUI's NavigationStack
+An example of SwiftUI's NavigationStack
 
 Honorable mentions:
 • List
