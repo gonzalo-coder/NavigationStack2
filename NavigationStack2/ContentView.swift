@@ -8,14 +8,52 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var path: [Int] = []
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        NavigationStack(path: $path) {
+            List {
+                Section(header: Text("Section A")) {
+                    NavigationLink("One", value: 1)
+                    NavigationLink("Two", value: 2)
+                    NavigationLink("Three", value: 3)
+                }
+                Section(header: Text("Section B")) {
+                    NavigationLink("Four", value: 4)
+                    NavigationLink("Five", value: 5)
+                    NavigationLink("Six", value: 6)
+                }
+            }
+            .navigationDestination(for: Int.self, destination: { num in
+                if num % 2 == 0 {
+                    EvenDetail(path: $path, num: num)
+                } else {
+                    OddDetail(path: $path, num: num)
+                }
+            })
         }
-        .padding()
+    }
+}
+
+struct EvenDetail: View {
+    @Binding var path: [Int]
+    let num: Int
+    
+    var body: some View {
+        Button("\(num) is even") {
+            path.removeLast()
+        }
+    }
+}
+
+struct OddDetail: View {
+    @Binding var path: [Int]
+    let num: Int
+    
+    var body: some View {
+        Button("\(num) is odd") {
+            path.removeLast()
+        }
     }
 }
 
