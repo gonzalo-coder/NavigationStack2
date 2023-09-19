@@ -1,6 +1,6 @@
 An example of SwiftUI's NavigationStack
 
-Honorable mentions:
+Honorable mentions:  
 • List  
 • Section  
 • NavigationLink  
