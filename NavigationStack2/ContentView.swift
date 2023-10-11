@@ -12,25 +12,30 @@ struct ContentView: View {
 
     var body: some View {
         NavigationStack(path: $path) {
-            List {
-                Section(header: Text("Section A")) {
-                    NavigationLink("One", value: 1)
-                    NavigationLink("Two", value: 2)
-                    NavigationLink("Three", value: 3)
+            VStack {
+                List {
+                    Section(header: Text("Section A")) {
+                        NavigationLink("One", value: 1)
+                        NavigationLink("Two", value: 2)
+                        NavigationLink("Three", value: 3)
+                    }
+                    Section(header: Text("Section B")) {
+                        NavigationLink("Four", value: 4)
+                        NavigationLink("Five", value: 5)
+                        NavigationLink("Six", value: 6)
+                    }
+                    Button("Go to Five") {
+                        path.append(5)
+                    }
                 }
-                Section(header: Text("Section B")) {
-                    NavigationLink("Four", value: 4)
-                    NavigationLink("Five", value: 5)
-                    NavigationLink("Six", value: 6)
-                }
+                .navigationDestination(for: Int.self, destination: { num in
+                    if num % 2 == 0 {
+                        EvenDetail(path: $path, num: num)
+                    } else {
+                        OddDetail(path: $path, num: num)
+                    }
+                })
             }
-            .navigationDestination(for: Int.self, destination: { num in
-                if num % 2 == 0 {
-                    EvenDetail(path: $path, num: num)
-                } else {
-                    OddDetail(path: $path, num: num)
-                }
-            })
         }
     }
 }
