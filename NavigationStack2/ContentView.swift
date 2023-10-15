@@ -33,7 +33,7 @@ struct ContentView: View {
         NavigationStack(path: $path) {
             List {
                 if settings.showNumbersSection {
-                    Section(header: Text("Section A")) {
+                    Section(header: Text("Numbers")) {
                         NavigationLink("One", value: 1)
                         NavigationLink("Two", value: 2)
                         NavigationLink("Three", value: 3)
@@ -93,10 +93,10 @@ struct SettingsDetail: View {
     var body: some View {
         VStack {
             Toggle(isOn: $settings.showNumbersSection) {
-                Text("Show Number Section")
+                Text("Show Numbers Section")
             }
             Toggle(isOn: $settings.showMoviesSection) {
-                Text("Show Movie Section")
+                Text("Show Movies Section")
             }
         }
         .padding(.horizontal, 40)
