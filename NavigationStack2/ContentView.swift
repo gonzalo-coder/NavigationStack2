@@ -59,7 +59,7 @@ struct ContentView: View {
                 }
             })
             .navigationDestination(for: Movie.self, destination: { model in
-                MovieDetail(path: $path, model: model)
+                MovieDetail(model: model)
             })
         }
     }
@@ -88,7 +88,6 @@ struct OddDetail: View {
 }
 
 struct MovieDetail: View {
-    @Binding var path: NavigationPath
     let model: Movie
     
     var body: some View {
