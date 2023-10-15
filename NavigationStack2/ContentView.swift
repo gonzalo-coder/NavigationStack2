@@ -21,23 +21,32 @@ let movies = [Movie(title: "Toy Story", rating: 5, watched: true),
               Movie(title: "Up", rating: 4, watched: true),
               Movie(title: "WALL-E", rating: 4, watched: true)]
 
+struct Settings: Hashable {
+    var showNumbersSection: Bool
+    var showMoviesSection: Bool
+}
+
 struct ContentView: View {
     @State private var path = NavigationPath()
-
+    @State var settings = Settings(showNumbersSection: true, showMoviesSection: true)
     var body: some View {
         NavigationStack(path: $path) {
             List {
-                Section(header: Text("Section A")) {
-                    NavigationLink("One", value: 1)
-                    NavigationLink("Two", value: 2)
-                    NavigationLink("Three", value: 3)
-                    NavigationLink("Four", value: 4)
-                    NavigationLink("Five", value: 5)
-                    NavigationLink("Six", value: 6)
+                if settings.showNumbersSection {
+                    Section(header: Text("Section A")) {
+                        NavigationLink("One", value: 1)
+                        NavigationLink("Two", value: 2)
+                        NavigationLink("Three", value: 3)
+                        NavigationLink("Four", value: 4)
+                        NavigationLink("Five", value: 5)
+                        NavigationLink("Six", value: 6)
+                    }
                 }
-                Section(header: Text("Movies")) {
-                    ForEach(movies, id: \.self) { movie in
-                        NavigationLink(movie.title, value: movie)
+                if settings.showMoviesSection {
+                    Section(header: Text("Movies")) {
+                        ForEach(movies, id: \.self) { movie in
+                            NavigationLink(movie.title, value: movie)
+                        }
                     }
                 }
                 Button("Random Movie") {
@@ -46,7 +55,13 @@ struct ContentView: View {
                     }
                 }
             }
-            .navigationTitle("NavigationStack")
+            .navigationTitle("Main")
+            .toolbar {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    NavigationLink(value: settings,
+                                   label: { Image(systemName: "gearshape") })
+                }
+            }
             .navigationDestination(for: Int.self, destination: { num in
                 if num % 2 == 0 {
                     EvenDetail(path: $path, num: num)
@@ -60,8 +75,31 @@ struct ContentView: View {
             })
             .navigationDestination(for: Movie.self, destination: { model in
                 MovieDetail(model: model)
+                    .navigationTitle("Movie Detail")
+                    .navigationBarTitleDisplayMode(.inline)
+            })
+            .navigationDestination(for: Settings.self, destination: { settings in
+                SettingsDetail(settings: $settings)
+                    .navigationTitle("Settings")
+                    .navigationBarTitleDisplayMode(.inline)
             })
         }
+    }
+}
+
+struct SettingsDetail: View {
+    @Binding var settings: Settings
+    
+    var body: some View {
+        VStack {
+            Toggle(isOn: $settings.showNumbersSection) {
+                Text("Show Number Section")
+            }
+            Toggle(isOn: $settings.showMoviesSection) {
+                Text("Show Movie Section")
+            }
+        }
+        .padding(.horizontal, 40)
     }
 }
 
@@ -96,8 +134,6 @@ struct MovieDetail: View {
             Text("Rating: \(model.rating)")
             Text("Watched: \(model.watched ? "Yes" : "No")")
         }
-        .navigationTitle("Movie Detail")
-        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
